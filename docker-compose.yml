@@ -13,8 +13,6 @@ services:
       - PORT=4000  # Ensure backend uses port 4000
     networks:
       - app-network
-    depends_on:
-      - frontend
 
   frontend:
     build:
@@ -27,8 +25,6 @@ services:
       - REACT_APP_API_URL=http://backend:4000  # Connect frontend to backend via Docker network
     networks:
       - app-network
-    depends_on:
-      - backend
 
 networks:
   app-network:
