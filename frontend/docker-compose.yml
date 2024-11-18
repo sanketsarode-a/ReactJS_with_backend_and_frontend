@@ -1,0 +1,35 @@
+version: '3.8'
+
+services:
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile.backend
+    container_name: backend
+    ports:
+      - "4000:4000"  # Expose backend on port 4000
+    environment:
+      - DB_URI=${DB_URI}  # MongoDB URI from .env
+      - PORT=4000  # Ensure backend uses port 4000
+    networks:
+      - app-network
+    depends_on:
+      - frontend
+
+  frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile.frontend
+    container_name: frontend
+    ports:
+      - "3000:3000"  # Expose frontend on port 3000
+    environment:
+      - REACT_APP_API_URL=http://backend:4000  # Connect frontend to backend via Docker network
+    networks:
+      - app-network
+    depends_on:
+      - backend
+
+networks:
+  app-network:
+    driver: bridge
