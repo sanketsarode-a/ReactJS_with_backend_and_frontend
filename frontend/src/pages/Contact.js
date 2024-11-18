@@ -17,8 +17,9 @@ function Contact() {
     }, []);
 
     const axiosFetchData = async (processing) => {
+        const apiUrl = process.env.REACT_APP_API_URL;  // Access the environment variable
         await axios
-            .get('http://backend:4000/users') // Updated to use the backend container's service name
+            .get(`${apiUrl}/users`)  // Use the environment variable in the URL
             .then((res) => {
                 if (processing) {
                     setSelectData(res.data);
@@ -34,8 +35,9 @@ function Contact() {
             message: message,
         };
 
+        const apiUrl = process.env.REACT_APP_API_URL;  // Access the environment variable
         await axios
-            .post('http://backend:4000/contact/send', postData) // Updated to use the backend container's service name
+            .post(`${apiUrl}/contact/send`, postData)  // Use the environment variable in the URL
             .then((res) => setError(<p className="success">{res.data}</p>))
             .catch((err) => console.log(err));
     };
