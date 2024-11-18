@@ -1,29 +1,20 @@
-# Use the official Node.js image as a base
+# Use the official Node.js image from Docker Hub
 FROM node:18
 
-# Set the working directory inside the container
+# Set the working directory
 WORKDIR /app
 
-# Copy package.json and package-lock.json to install dependencies
-COPY package*.json ./
+# Copy the package.json and package-lock.json files
+COPY frontend/package*.json ./
 
-# Install React.js dependencies
+# Install frontend dependencies
 RUN npm install
 
-# Copy the rest of the application code into the container
-COPY . .
+# Copy the rest of the frontend code
+COPY frontend/ .
 
-# Build the React application
-RUN npm run build
+# Expose the port for the React app
+EXPOSE 3000
 
-# Use an Nginx base image to serve the React build
-FROM nginx:alpine
-
-# Copy the build output from the previous stage to the Nginx default folder
-COPY --from=0 /app/build /usr/share/nginx/html
-
-# Expose the port Nginx will serve on
-EXPOSE 80
-
-# Start Nginx
-CMD ["nginx", "-g", "daemon off;"]
+# Run the frontend application
+CMD ["npm", "start"]
